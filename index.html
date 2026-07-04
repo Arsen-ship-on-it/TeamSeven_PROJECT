@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz App</title>
+
+</head>
+<body>
+<main class="app" id="app">
+
+    <!-- ЕКРАН 1: СТАРТ -->
+    <section class="screen active" id="screen-start">
+        <div class="hero">
+            <span class="badge">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.6 5.8 21 7 14 2 9.3 9 8.5 12 2"></polygon></svg>
+                Інтерактивний квіз
+            </span>
+            <div class="hero-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+            </div>
+            <h1>Перевір свої знання</h1>
+            <p>Невеликий тест із загальної ерудиції. Відповідай уважно — після кожної відповіді ти одразу побачиш, чи влучив у ціль.</p>
+            <div class="hero-meta">
+                <div class="meta-card"><span class="num" id="meta-questions">5</span><span class="lbl">питань</span></div>
+                <div class="meta-card"><span class="num">~2</span><span class="lbl">хвилини</span></div>
+                <div class="meta-card"><span class="num">3</span><span class="lbl">кінцівки</span></div>
+            </div>
+            <button class="btn btn-primary" id="btn-start">
+                Почати тест
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- ЕКРАН 2: ЗАВАНТАЖЕННЯ -->
+    <section class="screen" id="screen-loading">
+        <div class="loader">
+            <div class="spinner"><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+            <div>
+                <p class="loader-text">Завантаження даних із сервера<span class="dots"></span></p>
+                <p class="loader-sub">GET /api/quiz/questions</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ЕКРАН 3: КВІЗ -->
+    <section class="screen" id="screen-quiz">
+        <div class="quiz-top">
+            <span class="q-counter">Питання <b id="cur-num">1</b> / <span id="total-num">5</span></span>
+            <span class="q-score-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span id="live-score">0</span>
+            </span>
+        </div>
+        <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+        <span class="q-tag" id="q-category">Категорія</span>
+        <h2 class="question" id="q-text">—</h2>
+        <div class="answers" id="answers"></div>
+    </section>
+
+    <!-- ЕКРАН 4: РЕЗУЛЬТАТ -->
+    <section class="screen" id="screen-result">
+        <div class="confetti" id="confetti"></div>
+        <div class="result">
+            <div class="result-icon" id="result-icon"></div>
+            <span class="result-status" id="result-status">—</span>
+            <h2 id="result-title">—</h2>
+            <div class="score-ring">
+                <svg viewBox="0 0 170 170">
+                    <circle class="track" cx="85" cy="85" r="75"></circle>
+                    <circle class="meter" id="ring-meter" cx="85" cy="85" r="75"></circle>
+                </svg>
+                <div class="center">
+                    <span class="pct" id="result-pct">0%</span>
+                    <span class="frac" id="result-frac">0 / 5</span>
+                </div>
+            </div>
+            <p class="msg" id="result-msg">—</p>
+            <div class="result-actions">
+                <button class="btn btn-ghost" id="btn-review" style="display:none;"></button>
+                <button class="btn btn-primary" id="btn-restart">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                    Пройти ще раз
+                </button>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+
+
+
+
+
