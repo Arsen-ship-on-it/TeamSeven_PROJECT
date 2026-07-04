@@ -6,7 +6,7 @@ var state = {
     index: 0,
     score: 0,
     locked: false,
-    quizAmount: 5 // Кількість питань для API
+    quizAmount: 15 // Кількість питань для API
 };
 
 // ================================================
@@ -74,14 +74,14 @@ async function autoTranslateUK(textArr) {
     // З'єднуємо питання через подвійний відступ (найнадійніший сепаратор для перекладу батчем)
     var textCombined = textArr.join('\n \n');
     var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=uk&dt=t&q=" + encodeURIComponent(textCombined);
-    
+
     let res = await fetch(url);
     let data = await res.json();
-    
+
     // Складаємо отримані сегменти тексту назад
     let fullTranslation = "";
     for (let chunk of data[0]) { fullTranslation += chunk[0]; }
-    
+
     // Розбиваємо назад на масив (регулярний вираз на випадок зміщення перекладом пробілів)
     return fullTranslation.split(/\n\s*\n/).map(s => s.trim());
 }
@@ -92,14 +92,14 @@ async function autoTranslateUK(textArr) {
 // ================================================
 async function fetchQuestions() {
     var apiUrl = "https://opentdb.com/api.php?amount=" + state.quizAmount + "&category=12&type=multiple";
-    
+
     loaderText.innerHTML = 'Підключення до бази знань<span class="dots"></span>';
     loaderSub.textContent = "GET " + apiUrl;
 
     try {
         let res = await fetch(apiUrl);
         let data = await res.json();
-        
+
         if (data.response_code !== 0 || data.results.length === 0) {
             throw new Error("База пуста");
         }
@@ -155,18 +155,28 @@ async function fetchQuestions() {
                 correct: parsedBatch[idx].correctIdx
             });
         }
-        
+
         return finalQuestions;
 
     } catch(err) {
-        // ЯКЩО зник Інтернет або ліміт гугла вичерпаний: Фолбек на гарантовано український варіант
+        // ЯКЩО зник Інтернет або ліміт гугла вичерпаний: Фолбек на гарантовано український варіант (15 питань)
         console.warn("Помилка зв'язку або перекладу. Фолбек", err);
         return [
             { category: "Резерв", question: "Якому музичному гурту належить легендарна пісня «Bohemian Rhapsody»?", answers: ["The Beatles", "Rolling Stones", "Queen", "Nirvana"], correct: 2 },
             { category: "Український Рок", question: "Хто є незмінним лідером гурту «Океан Ельзи»?", answers: ["Скрябін", "Олег Скрипка", "Святослав Вакарчук", "Бумбокс"], correct: 2 },
             { category: "Теорія", question: "Скільки клавіш має стандартне фортепіано?", answers: ["64", "76", "88", "104"], correct: 2 },
             { category: "Класика", question: "Який видатний композитор втратив слух?", answers: ["Бах", "Моцарт", "Бетховен", "Вівальді"], correct: 2 },
-            { category: "Поп Музика", question: "Хто заспівав найпрослуховуванішу новорічну пісню «All I Want for Christmas Is You»?", answers: ["Мерайя Кері", "Леді Гага", "Мадонна", "Селін Діон"], correct: 0 }
+            { category: "Поп Музика", question: "Хто заспівав найпрослуховуванішу новорічну пісню «All I Want for Christmas Is You»?", answers: ["Мерайя Кері", "Леді Гага", "Мадонна", "Селін Діон"], correct: 0 },
+            { category: "Теорія", question: "Скільки струн має класична гітара?", answers: ["4", "6", "7", "12"], correct: 1 },
+            { category: "Джаз", question: "Кого називають «королем джазу» та піонером свінгу на трубі?", answers: ["Луї Армстронг", "Майлз Девіс", "Чарлі Паркер", "Дюк Еллінгтон"], correct: 0 },
+            { category: "Реггі", question: "Хто є найвідомішим виконавцем реггі, автором пісні «No Woman, No Cry»?", answers: ["Пітер Тош", "Боб Марлі", "Джиммі Кліфф", "Бенні Мен"], correct: 1 },
+            { category: "Опера", question: "Хто написав оперу «Кармен»?", answers: ["Джузеппе Верді", "Жорж Бізе", "Джакомо Пуччіні", "Ріхард Вагнер"], correct: 1 },
+            { category: "Поп Музика", question: "Яка виконавиця відома як «Королева поп-музики»?", answers: ["Мадонна", "Уітні Г'юстон", "Селін Діон", "Шер"], correct: 0 },
+            { category: "Теорія", question: "Скільки нот у стандартній музичній октаві?", answers: ["7", "8", "12", "5"], correct: 1 },
+            { category: "Рок", question: "Хто був вокалістом гурту Queen?", answers: ["Роджер Тейлор", "Браян Мей", "Фредді Мерк'юрі", "Джон Дікон"], correct: 2 },
+            { category: "Хіп-хоп", question: "У якому американському районі зародився хіп-хоп у 1970-х?", answers: ["Гарлем", "Бронкс", "Брукліні", "Квінс"], correct: 1 },
+            { category: "Класика", question: "Хто автор балету «Лебедине озеро»?", answers: ["Чайковський", "Прокоф'єв", "Стравінський", "Рахманінов"], correct: 0 },
+            { category: "Танці", question: "Яка країна вважається батьківщиною танго?", answers: ["Іспанія", "Бразилія", "Аргентина", "Куба"], correct: 2 }
         ];
     }
 }
@@ -295,7 +305,7 @@ function showResult() {
     showScreen("result");
     ringMeter.style.strokeDashoffset = 471;
     setTimeout(() => { ringMeter.style.strokeDashoffset = 471 * (1 - percent / 100); }, 100);
-    
+
     confetti.innerHTML = "";
     if (t.tier === "tier-high") launchConfetti();
 }
@@ -327,4 +337,3 @@ btnStart.addEventListener("click", startQuiz);
 btnRestart.addEventListener("click", restart);
 
 metaQuestions.textContent = state.quizAmount;
-
