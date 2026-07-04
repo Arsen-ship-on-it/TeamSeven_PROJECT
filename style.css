@@ -1,0 +1,803 @@
+/* ================================================
+   1. ЗМІННІ КОЛЬОРІВ ТА ТІНЕЙ
+   ================================================ */
+:root {
+    --bg-1: #1a1d3a; 
+    --bg-2: #2d1b4e; 
+    --bg-3: #0f1129;
+    
+    --accent: #7c6cff; 
+    --accent-bright: #9d8bff; 
+    --accent-glow: rgba(124, 108, 255, 0.45);
+    
+    --correct: #2dd4a7; 
+    --correct-glow: rgba(45, 212, 167, 0.4);
+    
+    --wrong: #ff5d73; 
+    --wrong-glow: rgba(255, 93, 115, 0.4); 
+    --warning: #ffa53b;
+    
+    --glass-bg: rgba(255, 255, 255, 0.07); 
+    --glass-bg-hover: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.14); 
+    --glass-border-strong: rgba(255, 255, 255, 0.25);
+    
+    --text-strong: #f4f3ff; 
+    --text-soft: #b8b6d8; 
+    --text-dim: #7d7ba3;
+    
+    --shadow-card: 0 24px 60px -20px rgba(0, 0, 0, 0.55);
+    
+    --radius-lg: 28px; 
+    --radius-md: 18px; 
+    --radius-sm: 14px;
+    
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ================================================
+   2. ГЛОБАЛЬНІ СКИДАННЯ ТА БАЗОВІ СТИЛІ
+   ================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text-strong);
+    background: 
+        radial-gradient(circle at 20% 15%, var(--bg-2), transparent 45%),
+        radial-gradient(circle at 85% 80%, #1e2a5e, transparent 50%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-3));
+    background-attachment: fixed;
+    min-height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Анімація фону */
+body::before, body::after {
+    content: "";
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+}
+
+body::before {
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+    top: -120px;
+    left: -100px;
+    animation: float 14s var(--ease) infinite alternate;
+}
+
+body::after {
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(45, 212, 167, 0.3), transparent 70%);
+    bottom: -120px;
+    right: -90px;
+    animation: float 18s var(--ease) infinite alternate-reverse;
+}
+
+@keyframes float {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(60px, 40px) scale(1.15); }
+}
+
+/* ================================================
+   3. ОСНОВНИЙ КОНТЕЙНЕР ТА ЕКРАНИ
+   ================================================ */
+.app {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 560px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(26px) saturate(140%);
+    -webkit-backdrop-filter: blur(26px) saturate(140%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    padding: 40px;
+    overflow: hidden;
+    transition: border-color 0.5s var(--ease), box-shadow 0.5s var(--ease);
+}
+
+.app::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+}
+
+.screen {
+    display: none;
+    animation: fadeIn 0.5s var(--ease);
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================================
+   4. ЕКРАН 1: СТАРТОВИЙ (HERO)
+   ================================================ */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 22px;
+}
+
+h1 {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    background: linear-gradient(120deg, #fff 20%, var(--accent-bright));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    color: var(--text-soft);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 400px;
+}
+
+/* Іконка по центру стартового екрану */
+.hero-icon {
+    width: 96px;
+    height: 96px;
+    display: grid;
+    place-items: center;
+    border-radius: 28px;
+    background: linear-gradient(140deg, rgba(124, 108, 255, 0.25), rgba(124, 108, 255, 0.05));
+    border: 1px solid var(--glass-border-strong);
+    box-shadow: 0 0 40px -8px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    color: var(--accent-bright);
+    margin-top: 4px;
+}
+
+.hero-icon svg {
+    width: 52px;
+    height: 52px;
+}
+
+/* Бейджики і карточки деталей */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--accent-bright);
+    background: rgba(124, 108, 255, 0.12);
+    border: 1px solid rgba(124, 108, 255, 0.3);
+    border-radius: 999px;
+    text-transform: uppercase;
+}
+
+.hero-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    margin: 6px 0 8px;
+}
+
+.meta-card {
+    padding: 16px 10px;
+    border-radius: var(--radius-sm);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meta-card .num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-strong);
+}
+
+.meta-card .lbl {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.03em;
+}
+
+/* ================================================
+   5. UI КНОПКИ
+   ================================================ */
+.btn {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 16px 32px;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s var(--ease), box-shadow 0.3s var(--ease), filter 0.3s var(--ease);
+}
+
+.btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent), #5b4bff);
+    box-shadow: 0 12px 30px -8px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    width: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 38px -8px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    filter: brightness(1.08);
+}
+
+.btn-primary:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Блік по кнопці */
+.btn-primary::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 70%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transition: left 0.7s var(--ease);
+}
+
+.btn-primary:hover::after {
+    left: 130%;
+}
+
+.btn-ghost {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border-strong);
+    backdrop-filter: blur(8px);
+}
+
+.btn-ghost:hover {
+    background: var(--glass-bg-hover);
+    transform: translateY(-2px);
+}
+
+/* ================================================
+   6. ЕКРАН ЗАВАНТАЖЕННЯ (LOADER)
+   ================================================ */
+.loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    padding: 30px 0;
+    text-align: center;
+}
+
+.spinner {
+    width: 78px;
+    height: 78px;
+    position: relative;
+}
+
+.spinner .ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid transparent;
+}
+
+.spinner .ring:nth-child(1) {
+    border-top-color: var(--accent-bright);
+    border-right-color: var(--accent-bright);
+    animation: spin 1s linear infinite;
+}
+
+.spinner .ring:nth-child(2) {
+    inset: 12px;
+    border-bottom-color: var(--correct);
+    border-left-color: var(--correct);
+    animation: spin 1.4s linear infinite reverse;
+}
+
+.spinner .ring:nth-child(3) {
+    inset: 24px;
+    border-top-color: rgba(255, 255, 255, 0.7);
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loader-text {
+    color: var(--text-soft);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.loader-sub {
+    color: var(--text-dim);
+    font-size: 13px;
+    font-family: ui-monospace, monospace;
+    letter-spacing: 0.02em;
+}
+
+.dots::after {
+    content: "";
+    animation: dots 1.4s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0% { content: ""; }
+    25% { content: "."; }
+    50% { content: ".."; }
+    75% { content: "..."; }
+    100% { content: ""; }
+}
+
+/* ================================================
+   7. ЕКРАН КВІЗУ
+   ================================================ */
+.quiz-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.q-counter {
+    font-size: 14px;
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+.q-counter b {
+    color: var(--text-strong);
+    font-size: 16px;
+}
+
+.q-score-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--correct);
+    background: rgba(45, 212, 167, 0.12);
+    border: 1px solid rgba(45, 212, 167, 0.28);
+    padding: 6px 14px;
+    border-radius: 999px;
+}
+
+.q-score-pill svg {
+    width: 15px;
+    height: 15px;
+}
+
+/* Прогрес-бар */
+.progress {
+    height: 8px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+    box-shadow: 0 0 12px var(--accent-glow);
+    transition: width 0.6s var(--ease);
+}
+
+.question {
+    font-size: 23px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 26px;
+    letter-spacing: -0.01em;
+}
+
+.q-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-bright);
+    margin-bottom: 12px;
+    opacity: 0.85;
+}
+
+/* ================================================
+   8. ВІДПОВІДІ КВІЗУ
+   ================================================ */
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.answer {
+    font-family: inherit;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-strong);
+    background: var(--glass-bg);
+    border: 1.5px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 17px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: background 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.2s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.answer .marker {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--glass-border);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-soft);
+    transition: all 0.3s var(--ease);
+}
+
+.answer .check {
+    margin-left: auto;
+    width: 22px;
+    height: 22px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s var(--ease);
+}
+
+.answer:not([disabled]):hover {
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-strong);
+    transform: translateX(5px);
+}
+
+.answer[disabled] {
+    cursor: default;
+}
+
+/* Стан Правильно */
+.answer.correct {
+    background: rgba(45, 212, 167, 0.16);
+    border-color: var(--correct);
+    color: #fff;
+    box-shadow: 0 0 26px -6px var(--correct-glow);
+}
+
+.answer.correct .marker {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: #06281f;
+}
+
+.answer.correct .check {
+    opacity: 1;
+    transform: scale(1);
+    color: var(--correct);
+}
+
+/* Стан Неправильно */
+.answer.wrong {
+    background: rgba(255, 93, 115, 0.16);
+    border-color: var(--wrong);
+    color: #fff;
+    box-shadow: 0 0 26px -6px var(--wrong-glow);
+    animation: shake 0.4s var(--ease);
+}
+
+.answer.wrong .marker {
+    background: var(--wrong);
+    border-color: var(--wrong);
+    color: #340910;
+}
+
+.answer.wrong .check {
+    opacity: 1;
+    transform: scale(1);
+    color: var(--wrong);
+}
+
+/* Якщо клікнуто по правильному чи неправильному варіанту, решту затемнюємо */
+.answer.dim {
+    opacity: 0.4;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-7px); }
+    75% { transform: translateX(7px); }
+}
+
+/* ================================================
+   9. ЕКРАН РЕЗУЛЬТАТІВ
+   ================================================ */
+.result {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.result-icon {
+    width: 110px;
+    height: 110px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    margin-bottom: 4px;
+}
+
+.result-icon svg {
+    width: 56px;
+    height: 56px;
+}
+
+.result h2 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.result-status {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 7px 18px;
+    border-radius: 999px;
+}
+
+.result p.msg {
+    color: var(--text-soft);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 400px;
+}
+
+/* Кругова діаграма результату */
+.score-ring {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    margin: 6px 0;
+}
+
+.score-ring svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
+
+.score-ring .track {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.08);
+    stroke-width: 12;
+}
+
+.score-ring .meter {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+    stroke-dasharray: 471;
+    stroke-dashoffset: 471;
+    transition: stroke-dashoffset 1.3s var(--ease) 0.2s, stroke 0.4s var(--ease);
+}
+
+.score-ring .center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.score-ring .pct {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.score-ring .frac {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-top: 6px;
+}
+
+.result-actions {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.result-actions .btn {
+    flex: 1;
+}
+
+/* ================================================
+   10. РІВНІ ОЦІНОК (ТИПИ РЕЗУЛЬТАТІВ)
+   ================================================ */
+/* Низький бал */
+.app.tier-low {
+    border-color: rgba(255, 93, 115, 0.3);
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7), 0 0 60px -20px var(--wrong-glow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.tier-low .result-icon {
+    background: rgba(120, 40, 50, 0.3);
+    color: #ff8a9c;
+    border: 1px solid rgba(255, 93, 115, 0.3);
+}
+.tier-low .result-status {
+    background: rgba(120, 40, 50, 0.4);
+    color: #ff8a9c;
+}
+.tier-low .score-ring .meter { stroke: #c2455a; }
+.tier-low .result h2 { color: #e8c5cb; }
+
+/* Середній бал */
+.app.tier-mid {
+    border-color: rgba(255, 165, 59, 0.3);
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6), 0 0 60px -22px rgba(255, 165, 59, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.tier-mid .result-icon {
+    background: rgba(255, 165, 59, 0.16);
+    color: var(--warning);
+    border: 1px solid rgba(255, 165, 59, 0.35);
+}
+.tier-mid .result-status {
+    background: rgba(255, 165, 59, 0.18);
+    color: var(--warning);
+}
+.tier-mid .score-ring .meter { stroke: var(--warning); }
+
+/* Високий бал */
+.app.tier-high {
+    border-color: rgba(45, 212, 167, 0.4);
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.55), 0 0 70px -18px var(--correct-glow), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.tier-high .result-icon {
+    background: rgba(45, 212, 167, 0.16);
+    color: var(--correct);
+    border: 1px solid rgba(45, 212, 167, 0.4);
+    box-shadow: 0 0 40px -6px var(--correct-glow);
+    animation: bounce 1.8s var(--ease) infinite;
+}
+.tier-high .result-status {
+    background: rgba(45, 212, 167, 0.18);
+    color: var(--correct);
+    animation: pulse-status 2s ease-in-out infinite;
+}
+.tier-high .score-ring .meter { stroke: var(--correct); }
+.tier-high .result h2 {
+    background: linear-gradient(120deg, #fff, var(--correct));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    30% { transform: translateY(-16px) scale(1.06); }
+    50% { transform: translateY(0) scale(1); }
+    65% { transform: translateY(-7px) scale(1.03); }
+}
+
+@keyframes pulse-status {
+    0%, 100% { box-shadow: 0 0 0 0 var(--correct-glow); }
+    50% { box-shadow: 0 0 0 10px rgba(45, 212, 167, 0); }
+}
+
+/* ================================================
+   11. ЕФЕКТ КОНФЕТІ (Для найвищого результату)
+   ================================================ */
+.confetti {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.confetti i {
+    position: absolute;
+    top: -14px;
+    width: 9px;
+    height: 9px;
+    opacity: 0;
+    animation: fall 2.6s ease-in forwards;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(620px) rotate(540deg); opacity: 0; }
+}
+
+/* ================================================
+   12. АДАПТИВ (Media Queries)
+   ================================================ */
+@media (max-width: 540px) {
+    .app {
+        padding: 28px 22px;
+        border-radius: 24px;
+    }
+    h1 {
+        font-size: 27px;
+    }
+    .question {
+        font-size: 20px;
+    }
+    .hero-meta {
+        gap: 8px;
+    }
+    .result-actions {
+        flex-direction: column;
+    }
+}
+
